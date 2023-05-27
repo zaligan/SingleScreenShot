@@ -58,21 +58,6 @@ namespace SingleScreenShot
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox chkBox = (CheckBox)sender;
-            if(chkBox.Checked)
-            {
-                chkBox.Text = "左画面";
-                rectangle.X = 0;
-            }
-            else
-            {
-                chkBox.Text = "右画面";
-                rectangle.X = 1920;
-            }
-        }
-
         private void radioBtnLeftScreen_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton radioBtn = (RadioButton)sender;
