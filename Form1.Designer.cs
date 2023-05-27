@@ -28,27 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtSelectedFile = new System.Windows.Forms.Label();
             this.btnOpenDialog = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnShot = new System.Windows.Forms.Button();
             this.txtPicName = new System.Windows.Forms.TextBox();
+            this.txtSelectedFile = new System.Windows.Forms.MaskedTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.radioBtnRightScreen = new System.Windows.Forms.RadioButton();
+            this.radioBtnLeftScreen = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtSelectedFile
-            // 
-            this.txtSelectedFile.AutoSize = true;
-            this.txtSelectedFile.Location = new System.Drawing.Point(311, 660);
-            this.txtSelectedFile.Name = "txtSelectedFile";
-            this.txtSelectedFile.Size = new System.Drawing.Size(0, 12);
-            this.txtSelectedFile.TabIndex = 0;
-            this.txtSelectedFile.Click += new System.EventHandler(this.label1_Click);
-            // 
             // btnOpenDialog
             // 
-            this.btnOpenDialog.Location = new System.Drawing.Point(266, 601);
+            this.btnOpenDialog.Location = new System.Drawing.Point(277, 646);
             this.btnOpenDialog.Name = "btnOpenDialog";
             this.btnOpenDialog.Size = new System.Drawing.Size(85, 23);
             this.btnOpenDialog.TabIndex = 1;
@@ -58,39 +52,85 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(292, 33);
+            this.pictureBox1.Location = new System.Drawing.Point(139, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(720, 480);
+            this.pictureBox1.Size = new System.Drawing.Size(1008, 567);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // btnShot
-            // 
-            this.btnShot.Location = new System.Drawing.Point(377, 553);
-            this.btnShot.Name = "btnShot";
-            this.btnShot.Size = new System.Drawing.Size(75, 23);
-            this.btnShot.TabIndex = 3;
-            this.btnShot.Text = "撮影";
-            this.btnShot.UseVisualStyleBackColor = true;
-            this.btnShot.Click += new System.EventHandler(this.btnShot_Click);
-            // 
             // txtPicName
             // 
-            this.txtPicName.Location = new System.Drawing.Point(583, 519);
+            this.txtPicName.Location = new System.Drawing.Point(368, 625);
             this.txtPicName.Name = "txtPicName";
             this.txtPicName.Size = new System.Drawing.Size(100, 19);
             this.txtPicName.TabIndex = 4;
+            // 
+            // txtSelectedFile
+            // 
+            this.txtSelectedFile.Location = new System.Drawing.Point(368, 650);
+            this.txtSelectedFile.Name = "txtSelectedFile";
+            this.txtSelectedFile.Size = new System.Drawing.Size(403, 19);
+            this.txtSelectedFile.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(290, 628);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "保存画像名";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(302, 607);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "撮影画面";
+            // 
+            // radioBtnRightScreen
+            // 
+            this.radioBtnRightScreen.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioBtnRightScreen.Checked = true;
+            this.radioBtnRightScreen.Location = new System.Drawing.Point(428, 595);
+            this.radioBtnRightScreen.Name = "radioBtnRightScreen";
+            this.radioBtnRightScreen.Size = new System.Drawing.Size(54, 24);
+            this.radioBtnRightScreen.TabIndex = 9;
+            this.radioBtnRightScreen.TabStop = true;
+            this.radioBtnRightScreen.Text = "右画面";
+            this.radioBtnRightScreen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioBtnRightScreen.UseVisualStyleBackColor = true;
+            this.radioBtnRightScreen.CheckedChanged += new System.EventHandler(this.radioBtnRightScreen_CheckedChanged);
+            // 
+            // radioBtnLeftScreen
+            // 
+            this.radioBtnLeftScreen.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioBtnLeftScreen.Location = new System.Drawing.Point(368, 595);
+            this.radioBtnLeftScreen.Name = "radioBtnLeftScreen";
+            this.radioBtnLeftScreen.Size = new System.Drawing.Size(54, 24);
+            this.radioBtnLeftScreen.TabIndex = 10;
+            this.radioBtnLeftScreen.TabStop = true;
+            this.radioBtnLeftScreen.Text = "左画面";
+            this.radioBtnLeftScreen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioBtnLeftScreen.UseVisualStyleBackColor = true;
+            this.radioBtnLeftScreen.CheckedChanged += new System.EventHandler(this.radioBtnLeftScreen_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.radioBtnLeftScreen);
+            this.Controls.Add(this.radioBtnRightScreen);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtSelectedFile);
             this.Controls.Add(this.txtPicName);
-            this.Controls.Add(this.btnShot);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnOpenDialog);
-            this.Controls.Add(this.txtSelectedFile);
             this.KeyPreview = true;
             this.MaximumSize = new System.Drawing.Size(1280, 720);
             this.MinimumSize = new System.Drawing.Size(1280, 720);
@@ -104,13 +144,15 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label txtSelectedFile;
         private System.Windows.Forms.Button btnOpenDialog;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnShot;
         private System.Windows.Forms.TextBox txtPicName;
+        private System.Windows.Forms.MaskedTextBox txtSelectedFile;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RadioButton radioBtnRightScreen;
+        private System.Windows.Forms.RadioButton radioBtnLeftScreen;
     }
 }
 

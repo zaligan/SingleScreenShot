@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +17,10 @@ namespace SingleScreenShot
 {
     public partial class Form1 : Form
     {
-        int i = 0;
+        Rectangle rectangle = new Rectangle(1920, 0, 1920, 1080);
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnOpenDialog_Click(object sender, EventArgs e)
@@ -35,40 +31,66 @@ namespace SingleScreenShot
             }
         }
 
-        private void btnShot_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void d(object sender, KeyEventArgs e)
-        {
-
-        }
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             
             if (e.KeyCode == Constants.shotKey)
             {
-                Rectangle rectangle = new Rectangle(1920, 0, 1920, 1080);
-                Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
-                Graphics graphics = Graphics.FromImage(bitmap);
-                graphics.CopyFromScreen(new Point(rectangle.X, rectangle.Y), new Point(0, 0), bitmap.Size);
-               
-                graphics.Dispose();
-                
-                if (folderBrowserDialog1.SelectedPath.Length < 1)
-                    MessageBox.Show("保存先を入力してください");
+                if (folderBrowserDialog1.SelectedPath == "" || txtPicName.Text == "")
+                    MessageBox.Show("保存先と画像名を入力してください");
                 else
                 {
+                    Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        graphics.CopyFromScreen(new Point(rectangle.X, 0), new Point(0, 0), bitmap.Size);
+                    }
+                    
+                    if(pictureBox1.Image != null)
+                        pictureBox1.Image.Dispose();
                     pictureBox1.Image = bitmap;
-                    MessageBox.Show(folderBrowserDialog1.SelectedPath);
+
                     txtSelectedFile.Text = folderBrowserDialog1.SelectedPath;
-                    bitmap.Save(@folderBrowserDialog1.SelectedPath + "\\" + txtPicName.Text + i,ImageFormat.Jpeg);
-                    i++;
+                    string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                    string filePath = Path.Combine(folderBrowserDialog1.SelectedPath, txtPicName.Text + "_" + timestamp + ".jpeg");
+                    bitmap.Save(filePath);
                 }
             }
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chkBox = (CheckBox)sender;
+            if(chkBox.Checked)
+            {
+                chkBox.Text = "左画面";
+                rectangle.X = 0;
+            }
+            else
+            {
+                chkBox.Text = "右画面";
+                rectangle.X = 1920;
+            }
+        }
+
+        private void radioBtnLeftScreen_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioBtn = (RadioButton)sender;
+            if (radioBtn.Checked)
+            {
+                rectangle.X = 0;
+            }
+        }
+
+        private void radioBtnRightScreen_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioBtn = (RadioButton)sender;
+            if (radioBtn.Checked)
+            {
+                rectangle.X = 1920;
+            }
+        }
+
     }
     static class Constants
     {
