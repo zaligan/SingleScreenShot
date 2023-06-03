@@ -17,10 +17,22 @@ namespace SingleScreenShot
 {
     public partial class Form1 : Form
     {
-        Rectangle rectangle = new Rectangle(1920, 0, 1920, 1080);
+        Rectangle rectangle = new Rectangle(0, 0, 1920, 1080);
+        int initialX = 0;
+        int originX = 1920;
         public Form1()
         {
             InitializeComponent();
+            this.KeyPreview = true;
+            Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.CopyFromScreen(new Point(1920, 0), new Point(0, 0), bitmap.Size);
+            }
+            Color pixelColor = bitmap.GetPixel(0, 0);
+            if (pixelColor.Name == "0")
+                rectangle.X = -1920;
+            originX += rectangle.X;
         }
 
         private void btnOpenDialog_Click(object sender, EventArgs e)
@@ -33,7 +45,8 @@ namespace SingleScreenShot
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            
+            if (this.ActiveControl is System.Windows.Forms.TextBox)
+                return;
             if (e.KeyCode == Constants.shotKey)
             {
                 if (folderBrowserDialog1.SelectedPath == "" || txtPicName.Text == "")
@@ -43,7 +56,7 @@ namespace SingleScreenShot
                     Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
                     using (Graphics graphics = Graphics.FromImage(bitmap))
                     {
-                        graphics.CopyFromScreen(new Point(rectangle.X, 0), new Point(0, 0), bitmap.Size);
+                        graphics.CopyFromScreen(new Point(originX, 0), new Point(0, 0), bitmap.Size);
                     }
                     
                     if(pictureBox1.Image != null)
@@ -63,7 +76,8 @@ namespace SingleScreenShot
             RadioButton radioBtn = (RadioButton)sender;
             if (radioBtn.Checked)
             {
-                rectangle.X = 0;
+                initialX = 0;
+                originX = initialX + rectangle.X;
             }
         }
 
@@ -72,13 +86,14 @@ namespace SingleScreenShot
             RadioButton radioBtn = (RadioButton)sender;
             if (radioBtn.Checked)
             {
-                rectangle.X = 1920;
+                initialX = 1920;
+                originX = initialX + rectangle.X;
             }
         }
 
     }
     static class Constants
     {
-        public const Keys shotKey = Keys.F1;
+        public const Keys shotKey = Keys.S;
     }
 }
