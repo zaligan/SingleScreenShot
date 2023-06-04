@@ -20,19 +20,20 @@ namespace SingleScreenShot
         Rectangle rectangle = new Rectangle(0, 0, 1920, 1080);
         int initialX = 0;
         int originX = 1920;
+        Keys selectedKey;
         public Form1()
         {
             InitializeComponent();
             this.KeyPreview = true;
-            Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
-            using (Graphics graphics = Graphics.FromImage(bitmap))
-            {
-                graphics.CopyFromScreen(new Point(1920, 0), new Point(0, 0), bitmap.Size);
-            }
+            Bitmap bitmap = SetBitmap(new Point(1920,0));
             Color pixelColor = bitmap.GetPixel(0, 0);
-            if (pixelColor.Name == "0")
-                rectangle.X = -1920;
+            //メインディスプレイを右にしている場合-1920に設定
+            rectangle.X = pixelColor.Name == "0" ? -1920 : 0;
             originX += rectangle.X;
+            foreach (var key in Enum.GetValues(typeof(Keys)))
+            {
+                comboBox1.Items.Add(key);
+            }
         }
 
         private void btnOpenDialog_Click(object sender, EventArgs e)
@@ -45,19 +46,17 @@ namespace SingleScreenShot
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            selectedKey = (Keys)comboBox1.SelectedItem;
+
             if (this.ActiveControl is System.Windows.Forms.TextBox)
                 return;
-            if (e.KeyCode == Constants.shotKey)
+            if (e.KeyCode == selectedKey)
             {
                 if (folderBrowserDialog1.SelectedPath == "" || txtPicName.Text == "")
                     MessageBox.Show("保存先と画像名を入力してください");
                 else
                 {
-                    Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
-                    using (Graphics graphics = Graphics.FromImage(bitmap))
-                    {
-                        graphics.CopyFromScreen(new Point(originX, 0), new Point(0, 0), bitmap.Size);
-                    }
+                    Bitmap bitmap = SetBitmap(new Point(originX, 0));
                     
                     if(pictureBox1.Image != null)
                         pictureBox1.Image.Dispose();
@@ -90,10 +89,38 @@ namespace SingleScreenShot
                 originX = initialX + rectangle.X;
             }
         }
+        private Bitmap SetBitmap(Point capturePoint)
+        {
+            Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.CopyFromScreen(capturePoint, new Point(0, 0), bitmap.Size);
+            }
+            return bitmap;
+        }
 
-    }
-    static class Constants
-    {
-        public const Keys shotKey = Keys.S;
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.LastPicName = txtPicName.Text;
+            Properties.Settings.Default.LastSelectedFolder = folderBrowserDialog1.SelectedPath;
+            if (comboBox1.SelectedItem != null)
+            {
+                Properties.Settings.Default.LastKey = comboBox1.SelectedItem.ToString();
+            }
+            Properties.Settings.Default.Save();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            txtPicName.Text = Properties.Settings.Default.LastPicName;
+            folderBrowserDialog1.SelectedPath = Properties.Settings.Default.LastSelectedFolder;
+            string lastKey = Properties.Settings.Default.LastKey;
+            if (!string.IsNullOrEmpty(lastKey))
+            {
+                comboBox1.SelectedItem = Enum.Parse(typeof(Keys), lastKey);
+            }
+            txtSelectedFile.Text = Properties.Settings.Default.LastSelectedFolder;
+        }
+
     }
 }
